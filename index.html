@@ -11,7 +11,8 @@
         <form id="app" class="container">
             <input-list v-slot="{ index, isOdd, isEven, isFirstRow, isLastRow }" :items="titles">
                 <div class="mb-4">
-                    {{index}} - {{isOdd}} - {{isEven}} - {{isFirstRow}} - {{isLastRow}}<Br>
+                    {{index}} - {{isOdd}} - {{isEven}} - {{isFirstRow}} - {{isLastRow}}
+                    <br>
                     <input-field
                         ref="titles"
                         label="Title"

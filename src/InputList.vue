@@ -1,13 +1,15 @@
 <template>
     <div class="input-list">
-        <div v-for="(value, i) in computedItems" :key="i" v-bind-events>
-            <slot
-                :index="i"
-                :is-odd="i % 2 === 1"
-                :is-even="i % 2 === 0"
-                :is-first-row="i === 0"
-                :is-last-row="i === computedItems.length - 1" />
-        </div>
+        <template v-for="(value, i) in items">
+            <div :key="i" v-bind-events class="input-list-item">
+                <slot
+                    :index="i"
+                    :is-odd="i % 2 === 1"
+                    :is-even="i % 2 === 0"
+                    :is-first-row="i === 0"
+                    :is-last-row="i === items.length - 1" />
+            </div>
+        </template>
     </div>
 </template>
 
@@ -49,6 +51,11 @@ export default {
             default: () => []
         },
 
+        newItem: {
+            type: Function,
+            default: () => ({})
+        },
+
         total: {
             type: Number,
             default: 1
@@ -57,11 +64,11 @@ export default {
         validate: {
             type: Function,
             default(el, parent) {
-                const nodes = parent.querySelectorAll('input, textarea, select');
-
-                return Array.from(nodes).reduce((carry, input) => {
-                    return !input.value ? false : carry;
-                }, true);
+                return Array
+                    .from(parent.querySelectorAll('input, textarea, select'))
+                    .reduce((carry, input) => {
+                        return !carry ? false : !!input.value;
+                    }, true);
             }
         },
 
@@ -74,23 +81,25 @@ export default {
                 if(parent.parentElement.children.length === 1) {
                     return false;
                 } 
-                
-                return nodes.reduce((carry, input) => {
-                    return input.value ? false : carry;
-                }, true);
+
+                return Array
+                    .from(parent.querySelectorAll('input, textarea, select'))
+                    .reduce((carry, input) => {
+                        return !carry ? false : !input.value;
+                    }, true);
             }
         }
 
     },
 
     data() {
-        const computedItems = [].concat(this.items);
+        return {  };
+    },
 
-        for(let i = computedItems.length; i < this.total; i++) {
-            computedItems.push(i.toString());
+    created() {
+        if(!this.items.length) {
+            this.items.push(this.newItem());
         }
-
-        return { computedItems };
     },
 
     methods: {
@@ -117,44 +126,30 @@ export default {
                 const i = this.indexOf(parent);
 
                 if(!this.isLastChild(parent) && this.validateEmpty(input, parent)) {
-                    this.computedItems.splice(i, 1);
+                    /*
+                    setTimeout(() => {
+                        console.log(inputdocument.activeElement);
+                    });
+                    */
                     
-                    input.dispatchEvent(new Event('remove'));
-
-                    parent.querySelector('input, select, textarea').focus();
-                    
-                    this.$emit('remove', parent, i);
+                    this.items.splice(i, 1);
                 }
             });
         },
 
         bindKeydownEvent(input, parent) {
             input.addEventListener('keydown', e => {
-                const i = this.indexOf(parent);
-                const nodes = Array.from(parent.querySelectorAll('input, select, textarea'));
+                const i = this.indexOf(parent), nodes = Array.from(parent.querySelectorAll('input, select, textarea'));
 
                 // If the keycode is not a tab, or the shift key is held
                 // then ignore the event.
                 if(e.shiftKey || e.keyCode !== TAB) {
                     return false;
                 }
-            
+
                 if(this.isLastChild(parent) && this.validate(input, parent)) {
-                    if(this.computedItems.indexOf(i + 1) === -1) {
-                        this.computedItems.push(this.computedItems.length.toString());
-                    }
+                    this.items.push(this.newItem());
                 }
-            });
-        },
-
-        add(input, parent) {
-            return new Promise((resolve, reject) => {
-                const i = this.indexOf(parent);
-
-                this.$nextTick(() => {
-                    this.$emit('add', parent.nextSiblingElement, i + 1);
-                    this.$nextTick(() => resolve(parent.nextSibling));
-                });
             });
         }
 
