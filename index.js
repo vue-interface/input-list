@@ -1,2 +1,5 @@
-import InputList from './src/InputList';
-export default InputList;
+import InputList from './src/InputList.vue';
+
+export {
+    InputList
+};

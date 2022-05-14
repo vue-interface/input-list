@@ -4,41 +4,41 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>InputList</title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-        <link rel="stylesheet" href="./dist/InputList.css">
     </head>
     <body>
-        <form id="app" class="container">
-            <input-list v-slot="{ index, isOdd, isEven, isFirstRow, isLastRow }" :items="titles">
+        <div id="app" class="container mx-auto mb-6">
+            <h1 class="text-4xl mb-6">input-list</h1>
+
+            <input-list v-slot="{ index, isOdd, isEven, isFirstRow, isLastRow }">
                 <div class="mb-4">
                     {{index}} - {{isOdd}} - {{isEven}} - {{isFirstRow}} - {{isLastRow}}
                     <br>
-                    <input-field
-                        ref="titles"
-                        label="Title"
-                        placeholder="Title"
-                        size="sm"
+                    <input
                         v-model="titles[index]"
+                        placeholder="Title"
                         :data-index="index"
+                        class="w-full px-2 py-1 outline-none rounded border border-gray-400 mb-3 focus:ring focus:border-blue-500"
                         @remove="e => titles.splice(index, 1)"
-                        custom>
-                    </input-field>
-                    <input-field
-                        ref="names"
-                        placeholder="Name"
-                        size="sm"
+                    />
+                    <input
                         v-model="names[index]"
+                        placeholder="Name"
                         :data-index="index"
+                        class="w-full px-2 py-1 outline-none rounded border border-gray-400 mb-3 focus:ring focus:border-blue-500"
                         @remove="e => names.splice(index, 1)"
-                        custom>
-                    </input-field>
+                    />
                 </div>
             </input-list>   
-        </form>
+        </div>
 
-        <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.js"></script>
-        <script type="text/javascript" src="./dist/InputList.umd.js"></script>
-        <script type="text/javascript">
+        <script type="module">
+            import './index.css';
+            import Vue from 'vue/dist/vue';
+            import { InputList } from './index.js';
+            
+            Vue.config.devtools = false;
+            Vue.config.productionTip = false;
+
             const vue = new Vue({
                 el: '#app',
                 components: {
@@ -46,7 +46,8 @@
                 },
                 data() {
                     return {
-                        value: null
+                        titles: [],
+                        names: []
                     };
                 }
             });

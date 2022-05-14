@@ -14,8 +14,6 @@
 </template>
 
 <script>
-import { isUndefined } from '@vue-interface/utils';
-
 const TAB = 9;
 
 export default {
@@ -28,7 +26,7 @@ export default {
                 const children = Array.from(vnode.elm.children);
 
                 children.forEach((child) => {
-                    if(isUndefined(child.value)) {
+                    if(typeof child.value === 'undefined') {
                         child.querySelectorAll('input, textarea, select')
                             .forEach(input => {
                                 vnode.context.bindEvents(input, el);
