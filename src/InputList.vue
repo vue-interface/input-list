@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-// import { nextTick, watch } from 'vue';
-
 
 const props = withDefaults(defineProps<{
     items?: any[]
@@ -9,12 +7,6 @@ const props = withDefaults(defineProps<{
 });
 
 let items = $ref(props.items);
-
-// watch(items, () => {
-//     nextTick(() => {
-        
-//     })
-// });
 
 function splice(start: number, deleteCount: number, ...args: any[]) {
     items.splice(start, length, ...args);
