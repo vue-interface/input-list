@@ -6,9 +6,9 @@ module.exports = {
         extend: {},
     },
     plugins: [
-        //
+        require('@vue-interface/form-control/tailwindcss')
     ],
     safelist: [
-        //
+        ...require('@vue-interface/form-control/tailwindcss/safelist')(),
     ]
 };

@@ -1,101 +1,38 @@
-import { defineComponent as u, resolveDirective as c, openBlock as l, createElementBlock as d, Fragment as f, renderList as h, withDirectives as m, renderSlot as v } from "vue";
-const p = 9, y = u({
-  directives: {
-    bindEvents: {
-      inserted(e, t, n) {
-        Array.from(n.elm.children).forEach((r) => {
-          typeof r.value > "u" ? r.querySelectorAll("input, textarea, select").forEach((a) => {
-            n.context.bindEvents(a, e);
-          }) : n.context.bindEvents(r, e);
-        });
-      }
-    }
-  },
+import { defineComponent as c, ref as m, openBlock as n, createElementBlock as o, Fragment as v, renderList as f, renderSlot as r, mergeProps as a, normalizeProps as h } from "vue";
+const k = { class: "input-list" }, L = /* @__PURE__ */ c({
+  __name: "InputList",
   props: {
-    items: {
-      type: Array,
-      default: () => []
-    },
-    newItem: {
-      type: Function,
-      default: () => ({})
-    },
-    total: {
-      type: Number,
-      default: 1
-    },
-    validate: {
-      type: Function,
-      default(e, t) {
-        return Array.from(t.querySelectorAll("input, textarea, select")).reduce((n, i) => n ? !!i.value : !1, !0);
-      }
-    },
-    validateEmpty: {
-      type: Function,
-      default(e, t) {
-        return t.parentElement.children.length === 1 ? !1 : Array.from(t.querySelectorAll("input, textarea, select")).reduce((n, i) => n ? !i.value : !1, !0);
-      }
+    items: { default: () => [null] }
+  },
+  setup(u) {
+    let e = m(u.items);
+    function i(l, p, ...t) {
+      e.value.splice(l, length, ...t);
     }
-  },
-  data() {
-    return {};
-  },
-  created() {
-    this.items.length || this.items.push(this.newItem());
-  },
-  methods: {
-    indexOf(e) {
-      return [...e.parentElement.children].indexOf(e);
-    },
-    isLastChild(e) {
-      return this.indexOf(e) === e.parentElement.children.length - 1;
-    },
-    isFirstChild(e) {
-      return this.indexOf(e) === 0;
-    },
-    bindEvents(e, t) {
-      this.bindBlurEvent(e, t), this.bindKeydownEvent(e, t);
-    },
-    bindBlurEvent(e, t) {
-      e.addEventListener("blur", () => {
-        const n = this.indexOf(t);
-        !this.isLastChild(t) && this.validateEmpty(e, t) && this.items.splice(n, 1);
-      });
-    },
-    bindKeydownEvent(e, t) {
-      e.addEventListener("keydown", (n) => {
-        if (n.shiftKey || n.keyCode !== p)
-          return !1;
-        this.isLastChild(t) && this.validate(e, t) && this.items.push(this.newItem());
-      });
-    }
+    return (l, p) => (n(), o("div", k, [
+      e.value.length ? (n(!0), o(v, { key: 0 }, f(e.value, (t, s) => (n(), o("div", {
+        key: s,
+        class: "input-list-item"
+      }, [
+        r(l.$slots, "default", a({
+          add: (...d) => e.value.push(...d),
+          remove: () => e.value.splice(e.value.indexOf(t), 1),
+          item: t,
+          splice: i
+        }, {
+          index: s,
+          isOdd: s % 2 === 1,
+          isEven: s % 2 === 0,
+          isFirstRow: s === 0,
+          isLastRow: s === e.value.length - 1
+        }))
+      ]))), 128)) : r(l.$slots, "fallback", h(a({ key: 1 }, {
+        add: (...t) => e.value.push(...t)
+      })))
+    ]));
   }
-}), E = (e, t) => {
-  const n = e.__vccOpts || e;
-  for (const [i, r] of t)
-    n[i] = r;
-  return n;
-}, b = { class: "input-list" };
-function _(e, t, n, i, r, a) {
-  const o = c("bind-events");
-  return l(), d("div", b, [
-    (l(!0), d(f, null, h(e.items, (x, s) => m((l(), d("div", {
-      key: s,
-      class: "input-list-item"
-    }, [
-      v(e.$slots, "default", {
-        index: s,
-        isOdd: s % 2 === 1,
-        isEven: s % 2 === 0,
-        isFirstRow: s === 0,
-        isLastRow: s === e.items.length - 1
-      })
-    ])), [
-      [o]
-    ])), 128))
-  ]);
-}
-const A = /* @__PURE__ */ E(y, [["render", _]]);
+});
 export {
-  A as InputList
+  L as InputList
 };
+//# sourceMappingURL=input-list.js.map
