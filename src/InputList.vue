@@ -11,10 +11,6 @@ let items = $ref(props.items);
 function splice(start: number, deleteCount: number, ...args: any[]) {
     items.splice(start, length, ...args);
 }
-
-function hash() {
-    return Math.random().toString(36).slice(2);
-}
 </script>
 
 <template>
