@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { ref } from 'vue';
+
 
 const props = withDefaults(defineProps<{
     items?: any[]
@@ -6,10 +8,10 @@ const props = withDefaults(defineProps<{
     items: () => [null]
 });
 
-let items = $ref(props.items);
+let items = ref(props.items);
 
 function splice(start: number, deleteCount: number, ...args: any[]) {
-    items.splice(start, length, ...args);
+    items.value.splice(start, length, ...args);
 }
 </script>
 
